@@ -1,0 +1,2 @@
+set MATLAB=Q:\R2013a.001\R2013a
+g:\Tornado_vxWorks_221\host\x86-win32\bin\make -f Subsystem.mk  MULTI_INSTANCE_CODE=0 GENERATE_ASAP2=0 TMW_EXTMODE_TESTING=0

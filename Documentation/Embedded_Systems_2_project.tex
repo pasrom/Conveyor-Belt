@@ -1,0 +1,157 @@
+\newcommand{\DokuOderPresentation}{doku}
+\newcommand{\Zusammenfassung}{false}
+\newcommand{\version}{v0.0}
+%
+\input{./sty/overallDefines.sty}
+%
+\documentclass[
+a4paper,
+oneside,
+11pt,
+DIV=calc,
+headsepline,
+%%BCOR=10mm,
+parskip=half,
+headings=big,
+draft=\debug,
+numbers=noenddot,
+%bibliography=totoc,
+%headinclude=false, %koma script seite 79 tabelle 3.7
+]{scrreprt}
+%
+\pdfoptionpdfminorversion=6 %use newer pdf version
+%
+\usepackage{./sty/fhv}
+%
+\ifthenelse{\equal{\debug}{true}}{
+	\usepackage{pagegrid}
+	\usepackage{showframe}
+	\usepackage{layout}
+}{}
+%
+%Display length in mm
+\makeatletter
+\ifthenelse{\equal{\debug}{true}}{
+	\renewcommand*{\lay@value}[2]{%
+		\strip@pt\dimexpr0.351459\dimexpr\csname#2\endcsname\relax\relax mm%
+	}
+}{}
+\makeatother
+%
+%
+\makeglossaries
+%
+% General Settings for Title...
+%
+\setLanguage{\newLanguage}
+\setTitle{Embedded Systems 2}
+\setThesistype{BACHLELOR}
+\setAuthor{%
+	Florian Burtscher\\%
+	Roman Passler\\%
+}
+\setAuthorId{MATRIKELNUMMER}
+\setStudyprogram{Master Mechatronics} 
+\setSupervisor{Prof. (FH) Dipl.-Ing. Horatiu Pilsan} 
+\setSupervisorCompany{COMPANY}
+%
+%% PDF Settings
+%
+\hypersetup{
+	pdftitle={\getTitle},
+	pdfauthor={%
+		Passler\xmpcomma\ Roman; %
+		Burtscher\xmpcomma\ Florian%
+	},
+	pdfsubject={},
+	pdfkeywords={Fachhochschule Vorarlberg : Requirements Conveyor Belt : MEM : Pilsan, Horatiu},
+	pdfcreator={pdflatex},
+	pdfproducer={LaTeX with shyperref},
+	pdflang={de},
+	unicode=true,
+}
+%
+\setkomafont{descriptionlabel}{\normalfont\bfseries}%fuer glossaries serifen schrift
+%
+\newcounter{mylabelcounter}
+
+%\makeatletter
+%\newcommand{\labelText}[2]{%
+%	#1\refstepcounter{mylabelcounter}%
+%	\immediate\write\@auxout{%
+%		\string\newlabel{#2}{{1}{\thepage}{{\unexpanded{#1}}}{mylabelcounter.\number\value{mylabelcounter}}{}}%
+%	}%
+%}
+%
+\makeatletter
+\newcommand{\labelText}[2]{%
+	\@bsphack
+	\csname phantomsection\endcsname % in case hyperref is used
+	\def\@currentlabel{#1}{\label{#2}}%
+	\@esphack
+}
+\makeatother
+%
+%
+\begin{document}
+	%
+	% for Backlinks to work properly
+	%
+	\let\hypercontentsline=\contentsline	\renewcommand{\contentsline}[4]{\hypertarget{toc.#4}{}\hypercontentsline{#1}{#2}{#3}{#4}}
+	%
+	% Import the acronyms
+	%
+	\input{./util/Acronym.tex} %provide the defined acronyms to be used
+	%
+	\sisetup{output-decimal-marker = {,}}
+	% 
+	\pagenumbering{gobble} % used to prevent the page numbering 
+	{\ifthenelse{\equal{\debug}{true}}{
+			\layout
+			\textrm{Serif: \rmdefault}\par
+			\textsf{Sans-Serif: \sfdefault}\par
+			\texttt{Teletype: \ttdefault}
+		}{}
+		%
+		% evtl. Sperrvermerkseite
+		% nur in begründeten Ausnahmefällen verwenden
+		% Aufgrund gesetzlicher Bestimmungen ist eine Sperre maximal für fünf Jahre möglich
+		\hypersetup{pageanchor=false}
+		%\sperrvermerk{Bachmann electronic GmbH}{5} 
+		%
+		\maketitle % creates the title page
+		%
+		\restoregeometry
+		%
+		\hypersetup{pageanchor=true}
+		\pagenumbering{Roman} 
+		%
+		% Abstracts
+		%\subfile{./tex/Widmung.tex}
+		%\subfile{./tex/Kurzreferat.tex}
+		%\subfile{./tex/Abstract.tex}
+		%\subfile{./tex/Vorwort.tex}
+		\newpage
+		%
+		\fhvlists
+		%\pagenumbering{arabic} % seitenzahlnummerierung ab hier beginnen	
+		%\subfile{./tex/Hauptteil.tex}
+		\subfile{./tex/0-Projektbeschreibung.tex}
+		\subfile{./tex/1-Anforderungen.tex}
+		\subfile{./tex/2-statische-software-structure.tex}
+		\subfile{./tex/3-model-of-behavior.tex}
+		\subfile{./tex/4-closed-loop-control.tex}
+		%\subfile{./tex/5-differences-first-second.tex}
+%		\subfile{./tex/Examples.tex}
+		%The order of the chapters used
+		% final generated information
+		\glossaryAndBibliography
+		\newpage
+		\appendix
+		\addAppendix{
+			\subfile{./tex/Anhang.tex}
+		}
+		%
+		% Statuory Declaration
+		%\statuoryDeclaration
+\end{document}
